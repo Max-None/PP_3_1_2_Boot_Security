@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -35,14 +32,7 @@ public class AdminController {
 
     @PostMapping("/new")
     public String saveUser(@ModelAttribute("user") User user, @RequestParam(value = "authorities" , required = false) String[] authorities) {
-        List<Role> userRoles= new ArrayList<>();
-        for (int i = 0; i < authorities.length; i++) {
-            Role role = new Role();
-            role.setName(authorities[i]);
-            userRoles.add(role);
-        }
-        user.setRoles(userRoles);
-        userService.saveUser(user);
+        userService.saveUser(user, authorities);
         return "redirect:/admin";
     }
 
@@ -54,7 +44,7 @@ public class AdminController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable ("id") int id) {
-        userService.delete(id);
+        userService.deleteUser(id);
         return "redirect:/admin";
     }
 
@@ -63,20 +53,19 @@ public class AdminController {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         boolean[] checkedRoles = new boolean[2];
-        checkedRoles[0] = false;
-        checkedRoles[1] = false;
         List<Role> setOfRoles = user.getRoles();
-        for(int i = 0; i < setOfRoles.size(); i++) {
-            checkedRoles[0] = setOfRoles.get(i).getAuthority().equals("ROLE_USER") || checkedRoles[0];
-            checkedRoles[1] = setOfRoles.get(i).getAuthority().equals("ROLE_ADMIN") || checkedRoles[1];
+        for (Role setOfRole : setOfRoles) {
+            checkedRoles[0] = setOfRole.getAuthority().equals("ROLE_USER") || checkedRoles[0];
+            checkedRoles[1] = setOfRole.getAuthority().equals("ROLE_ADMIN") || checkedRoles[1];
         }
         model.addAttribute("checkedRoles", checkedRoles);
+        user.setPassword("");
         return "admin/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable ("id") int id) {
-        userService.saveUser(user);
+    public String update(@ModelAttribute("user") User user, @RequestParam(value = "authorities" , required = false) String[] authorities) {
+        userService.saveUser(user, authorities);
         return "redirect:/admin";
     }
 }

@@ -16,6 +16,12 @@
   <input type="text" th:field="*{age}" id="age"/>
   <br/>
 
+  <label for="username">Enter username: </label>
+  <input type="text" th:field="*{username}" id="username"/>
+  <label for="password">Enter new password: </label>
+  <input type="text" th:field="*{password}" id="password"/>
+  <br/>
+
   <label>
     <span th:text="${'ROLE_USER'}"></span>
     <input type="checkbox" th:checked="${checkedRoles[0]}" name="authorities" value="ROLE_USER">
