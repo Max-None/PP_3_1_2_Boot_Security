@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
-import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -53,7 +53,7 @@ public class AdminController {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         boolean[] checkedRoles = new boolean[2];
-        List<Role> setOfRoles = user.getRoles();
+        Set<Role> setOfRoles = user.getRoles();
         for (Role setOfRole : setOfRoles) {
             checkedRoles[0] = setOfRole.getAuthority().equals("ROLE_USER") || checkedRoles[0];
             checkedRoles[1] = setOfRole.getAuthority().equals("ROLE_ADMIN") || checkedRoles[1];

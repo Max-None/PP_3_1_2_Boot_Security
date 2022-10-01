@@ -3,7 +3,7 @@ package ru.kata.spring.boot_security.demo.models;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "myusers")
@@ -30,7 +30,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     @Fetch(FetchMode.JOIN)
-    private List<Role> roles;
+    private Set<Role> roles;
 
 
 
@@ -90,11 +90,11 @@ public class User {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 }
